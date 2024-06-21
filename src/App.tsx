@@ -7,29 +7,32 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { RecordModel } from 'pocketbase';
 import { LoginFrom } from './Login';
+import { Button } from './components/ui/button';
 
-
-interface Message extends RecordModel {
-  message? : string ;
-}
+// interface Message extends RecordModel {
+//   message? : string ;
+// }
 
  function App() {
   const pb = new PocketBase('http://127.0.0.1:8090') ;
-  let [result ,setResult] = useState<Message[] | null>(null)  ;  
+  let [result ,setResult] = useState<RecordModel[] | null>(null)  ;  
  useEffect(()=>{
-  pb.collection("messages").getFullList()
+  pb.collection("users").getFullList()
   .then(res=>{setResult(res)})
   .catch(err=>console.log(err))  ;
- } , []) ; 
+ },[]) ; 
+
  console.log(result) ;
   
 
   return (
-    <div className='w-5/12 h-screen grid content-center justify-center'>
-      <h1 className='flex flex-row'>Hello world</h1>
+    <div className='App flex flex-col items-center justify-center'>
+      <h1 className=''>Hello world</h1>
+      <div className='w-2/6'>
       <LoginFrom/>
+      </div>
       
-      
+      <Button>hi</Button>
     </div>
   )
 }

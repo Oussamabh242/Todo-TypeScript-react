@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -36,7 +35,7 @@ export function LoginFrom(){
     } ; 
     return (
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className=" space-y-8  d">
             <FormField
               control={form.control}
               name="username"
@@ -63,7 +62,7 @@ export function LoginFrom(){
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit" className="flex justify-center">Submit</Button>
           </form>
         </Form>
       )
