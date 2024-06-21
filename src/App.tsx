@@ -6,13 +6,14 @@ import PocketBase from 'pocketbase';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { RecordModel } from 'pocketbase';
+import { LoginFrom } from './Login';
+
 
 interface Message extends RecordModel {
   message? : string ;
 }
 
  function App() {
-  console.log()
   const pb = new PocketBase('http://127.0.0.1:8090') ;
   let [result ,setResult] = useState<Message[] | null>(null)  ;  
  useEffect(()=>{
@@ -24,12 +25,12 @@ interface Message extends RecordModel {
   
 
   return (
-    <>
-      <h1>Hello world</h1>
-      {result?.map((e)=>
-        <h2>{e.message}</h2>
-      )}
-    </>
+    <div className='w-5/12 h-screen grid content-center justify-center'>
+      <h1 className='flex flex-row'>Hello world</h1>
+      <LoginFrom/>
+      
+      
+    </div>
   )
 }
 
