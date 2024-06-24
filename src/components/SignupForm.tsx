@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { useState, useEffect } from "react";
 import {usePbContext } from "@/context/pocketbase.tsx";
-import { Message } from "@/context/pocketbase.tsx";
+import { Todo } from "@/context/pocketbase.tsx";
 
 
 const formSchema = z.object({
@@ -24,15 +24,10 @@ const formSchema = z.object({
   }) ;
 
 const SignupForm = () => {
-    const {login , createUser , createMessage} = usePbContext() ;
-    const [message , setmessage] = useState<Message|undefined>(undefined) ;
+    const {login , createUser , createTodo} = usePbContext() ;
+    // const [message , setmessage] = useState<Message|undefined>(undefined) ;
 
-    useEffect(()=>{
-    
-        createMessage("k")
-        .then(res=>setmessage(res))
-        .catch(err=>console.log(err)) ;
-    }, []) ; 
+     
     
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),

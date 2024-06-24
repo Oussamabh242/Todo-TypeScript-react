@@ -9,8 +9,9 @@ type User = {
 }
 type PbUser= AuthModel & User;
 
-export interface Message extends RecordModel {
-    message? : string ;
+export interface Todo extends RecordModel {
+    task? : string ;
+    state? : string;
 }
 
 interface PbProps{
@@ -19,10 +20,10 @@ interface PbProps{
 
 type FunctionContextType = {
   login: (user : logUser) => Promise<void>;
-  fetchMessages: () => Promise<Message[] | undefined>;
+  fetchTodos: () => Promise<Todo[] | undefined>;
   isLogged: () => PbUser |null;
   createUser: (user : SignUser)=> Promise<RecordModel> ;
-  createMessage: (message:string)=> Promise<Message | undefined> ; 
+  createTodo: (task:string)=> Promise<Todo | undefined> ; 
 };
 
 interface logUser  {
@@ -40,8 +41,13 @@ const pb = new PocketBase('http://127.0.0.1:8090') ;
 pb.autoCancellation(false) ; 
 
 
-export async  function getMessages()  {
-    let data = await pb.collection("messages").getFullList() ;
+export async  function getTodos()  {
+    const user = isLogged()?.id ; 
+    let data = await pb.collection("Todos").getFullList(
+
+    ) ;
+    console.log(user) ;
+    console.log(data) ; 
     return data  ; 
 }
 
@@ -63,24 +69,25 @@ export const isLogged = ():PbUser |null=>{
     return null 
 }
 
-const fetchMessages = async (): Promise<Message[] | undefined> => {
+const fetchTodos = async (): Promise<Todo[] | undefined> => {
   try {
-    const result = await getMessages();
-    return result
+    const result = await getTodos( );
+    return result as Todo[]
   } catch (error) {
     console.error('Error fetching messages:', error);
     return undefined
   }
 };
 
-export const createMessage= async (message : string) : Promise<Message | undefined> =>{
+export const createTodo= async (task : string) : Promise<Todo | undefined> =>{
   try{
     const data = {
-    message : message , 
-    user :isLogged()?.id
+    task : task , 
+    user :isLogged()?.id,
+    state : "Blocked"
     }
-    const record = await pb.collection('messages').create(data) ; 
-    return record as Message
+    const record = await pb.collection('Todos').create(data) ; 
+    return record as Todo
   }
   catch(err){
     console.log(err) ; 
@@ -88,6 +95,8 @@ export const createMessage= async (message : string) : Promise<Message | undefin
   }
   
 }
+
+createTodo("qmsldkfjq") ; 
 
 export const createUser=async (data : SignUser)=>{
   const record = pb.collection("users").create(data) ; 
@@ -102,7 +111,7 @@ export const createUser=async (data : SignUser)=>{
 export const PbContext = createContext<FunctionContextType|null>(null) ; 
 export function PbContextProvider({children} : PbProps){
   return(
-    <PbContext.Provider value={{login , isLogged , fetchMessages ,createUser , createMessage}}>  {children} </PbContext.Provider>
+    <PbContext.Provider value={{login , isLogged , fetchTodos ,createUser , createTodo}}>  {children} </PbContext.Provider>
   )
 }
 export function usePbContext() {
